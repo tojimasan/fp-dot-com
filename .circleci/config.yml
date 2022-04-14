@@ -41,21 +41,19 @@ jobs:
       - image: cimg/ruby:2.7.5
     steps:
       - checkout
+      - ruby/install-deps
+      - heroku/install
       - setup_remote_docker:
           version: 19.03.13
-      - run:
-          name: bundle install
-          command: bundle install
       - run:
           name: db create
           command: bundle exec rake db:create
       - run:
-          name: db migrate
-          command: bundle exec rake db:migrate
-      - run:
           name: compile
           command: bundle exec rake assets:precompile RAILS_ENV=production
-      - heroku/install
+      - run:
+          name: database setup
+          command: heroku run bundle exec rake db:migrate RAILS_ENV=production -a $HEROKU_APP_NAME
       - run:
           name: heroku login
           command: heroku container:login
@@ -65,9 +63,6 @@ jobs:
       - run:
           name: release docker image
           command: heroku container:release web -a $HEROKU_APP_NAME
-      - run:
-          name: database setup
-          command: heroku run bundle exec rake db:migrate RAILS_ENV=production -a $HEROKU_APP_NAME
 
 workflows:
   version: 2
