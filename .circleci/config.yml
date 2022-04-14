@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Rspec
           command: bundle exec rspec
-  deploy:
+  heroku-deploy:
     docker:
       - image: cimg/ruby:2.7.5-node
     steps:
@@ -50,15 +50,10 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
       - heroku/install
-      - run:
-          name: heroku login
-          command: heroku container:login
-      - run:
-          name: push docker image
-          command: heroku container:push web -a $HEROKU_APP_NAME
-      - run:
-          name: release docker image
-          command: heroku container:release web -a $HEROKU_APP_NAME
+      - heroku/deploy-via-git
+      - heroku/push-docker-image:
+        recursive: true
+      - heroku/release-docker-image
       - run:
           name: database setup
           command: heroku run bundle exec rake db:migrate RAILS_ENV=production -a $HEROKU_APP_NAME
@@ -71,9 +66,9 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
+      - heroku-deploy:
           requires:
             - test
-          filters:
-            branches:
-              only: master
+          # filters:
+          #   branches:
+          #     only: master
