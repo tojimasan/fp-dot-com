@@ -43,6 +43,15 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 19.03.13
+      - run:
+          name: db create
+          command: bundle exec rake db:create
+      - run:
+          name: db migrate
+          command: bundle exec rake db:migrate
+      - run:
+          name: compile
+          command: bundle exec rake assets:precompile RAILS_ENV=production
       - heroku/install
       - run:
           name: heroku login
