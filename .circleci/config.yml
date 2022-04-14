@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:2.7.5-node
     working_directory: ~/fp-dot-com/src
     steps:
       - checkout:
@@ -15,7 +15,7 @@ jobs:
 
   test:
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:2.7.5-node
       - image: cimg/mysql:5.7
         environment:
           MYSQL_ROOT_PASSWORD: password
@@ -34,11 +34,17 @@ jobs:
           name: Database setup
           command: bundle exec rails db:migrate
       - run:
-          name: test
-          command: bundle exec rake test
+          name: yarn install
+          command: yarn install
+      - run:
+          name: webpack
+          command: bundle exec bin/webpack
+      - run:
+          name: Rspec
+          command: bundle exec rspec
   deploy:
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:2.7.5-node
     steps:
       - checkout
       - setup_remote_docker:
