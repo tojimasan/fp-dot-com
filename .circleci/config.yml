@@ -44,6 +44,9 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
       - run:
+          name: bundle install
+          command: bundle install
+      - run:
           name: db create
           command: bundle exec rake db:create
       - run:
