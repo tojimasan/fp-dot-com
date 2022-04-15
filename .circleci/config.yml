@@ -51,7 +51,8 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
       - heroku/install
-      - heroku/deploy-via-git
+      - heroku/deploy-via-git:
+          force: true
       - heroku/push-docker-image:
           recursive: true
       - heroku/release-docker-image
