@@ -45,12 +45,18 @@ jobs:
   heroku-deploy:
     docker:
       - image: cimg/ruby:2.7.5-node
+    working_directory: ~/fp-dot-com/src
     steps:
       - checkout
       - setup_remote_docker:
           version: 19.03.13
       - heroku/install
-      - heroku/deploy-via-git
+      - run:
+          name: Deploy master to Heroku
+          command: |
+          if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            git push "https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git" master
+          fi
       - heroku/push-docker-image:
           recursive: true
       - heroku/release-docker-image
@@ -63,12 +69,13 @@ workflows:
   build_test_and_deploy:
     jobs:
       - build
-      - test:
-          requires:
-            - build
-      - heroku-deploy:
-          requires:
-            - test
+      # - test:
+      #     requires:
+      #       - build
+      - heroku-deploy
+      # - heroku-deploy:
+          # requires:
+          #   - test
           # filters:
           #   branches:
           #     only: master
