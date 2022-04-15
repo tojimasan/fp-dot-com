@@ -52,7 +52,7 @@ jobs:
       - heroku/install
       - heroku/deploy-via-git
       - heroku/push-docker-image:
-        recursive: true
+          recursive: true
       - heroku/release-docker-image
       - run:
           name: database setup
