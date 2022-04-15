@@ -1,12 +1,12 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@1.1.2
-  heroku: circleci/heroku@1.2.3
+  ruby: circleci/ruby@1.7.1
+  heroku: circleci/heroku@1.2.6
 
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:2.7.5-node
     working_directory: ~/fp-dot-com/src
     steps:
       - checkout:
@@ -15,7 +15,7 @@ jobs:
 
   test:
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:2.7.5-node
       - image: cimg/mysql:5.7
         environment:
           MYSQL_ROOT_PASSWORD: password
@@ -34,35 +34,30 @@ jobs:
           name: Database setup
           command: bundle exec rails db:migrate
       - run:
-          name: test
-          command: bundle exec rake test
-  deploy:
+          name: yarn install
+          command: yarn install
+      - run:
+          name: webpack
+          command: bundle exec bin/webpack
+      - run:
+          name: Rspec
+          command: bundle exec rspec
+  heroku-deploy:
     docker:
-      - image: cimg/ruby:2.7.5
+      - image: cimg/ruby:2.7.5-node
+    working_directory: ~/fp-dot-com/src
     steps:
       - checkout
-      - ruby/install-deps
-      - heroku/install
       - setup_remote_docker:
           version: 19.03.13
-      - run:
-          name: db create
-          command: bundle exec rake db:create
-      - run:
-          name: compile
-          command: bundle exec rake assets:precompile RAILS_ENV=production
+      - heroku/install
+      - heroku/deploy-via-git
+      - heroku/push-docker-image:
+          recursive: true
+      - heroku/release-docker-image
       - run:
           name: database setup
           command: heroku run bundle exec rake db:migrate RAILS_ENV=production -a $HEROKU_APP_NAME
-      - run:
-          name: heroku login
-          command: heroku container:login
-      - run:
-          name: push docker image
-          command: heroku container:push --recursive -a $HEROKU_APP_NAME
-      - run:
-          name: release docker image
-          command: heroku container:release web -a $HEROKU_APP_NAME
 
 workflows:
   version: 2
@@ -72,7 +67,7 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
+      - heroku-deploy:
           requires:
             - test
           filters:
