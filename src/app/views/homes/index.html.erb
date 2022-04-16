@@ -1,4 +1,9 @@
-<div class="vh-100 d-flex align-items-center justify-content-center"> 
+<div class="vh-100 d-flex align-items-center justify-content-center">
+    <% if flash[:success] %>
+        <div class="alert alert-primary" role="alert">
+            <%= flash[:success] %>
+        </div>
+    <% end %>
     <div class="text-center text-dark">
         <h1>FP.com</h1>
         <h2>FPと相談できるサービス</h2>

@@ -3,7 +3,11 @@
     <h2 class="lead">FP登録</h2>
     <span class="mx-4"><%= link_to "クライアント登録画面へ", new_client_path, { class: "text-decoration-none"} %></span>
   </div>
-  <%= flash[:error] %>
+  <% if flash[:error] %>
+      <div class="alert alert-danger" role="alert">
+          <%= flash[:error] %>
+      </div>
+  <% end %>
   <%= form_with model: @financial_planner do |form| %>
     <div class="mb-3">
       <%= form.label :name, class: "form-label" %><br>
