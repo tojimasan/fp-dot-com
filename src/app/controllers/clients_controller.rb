@@ -8,7 +8,7 @@ class ClientsController < ApplicationController
         @client = Client.new(client_params)
         if @client.save
           flash[:success] = "作成に成功しました"
-          redirect_to @client
+          redirect_to client_path(@client.id)
         else
           flash[:error] = "作成できませんでした"
           redirect_to new_client_path
