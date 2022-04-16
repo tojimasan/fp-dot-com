@@ -12,8 +12,8 @@ RSpec.describe "FinancialPlanners", type: :system do
       visit new_financial_planner_path
       fill_in 'Name', with: @financial_planner.name
       expect { click_on('登録')}.to change { FinancialPlanner.count }.by(1)
-      # 新規登録された結果、ログアウトボタンが表示される
-      expect(page).to have_content("ログアウト")
+      # 新規登録された結果、予約一覧が表示される
+      expect(page).to have_content("予約一覧")
     end
   end
 
