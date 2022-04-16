@@ -4,6 +4,9 @@
         <%= link_to root_path, class: "navbar-brand" do %>
             <p class="log">FP.com</p>
         <% end %>
+        <% if logged_in? %>
+            <p class="navbar-text my-0"><%= current_user.name %></p>
+        <% end %>
     </div>
     </nav>
 </body>
