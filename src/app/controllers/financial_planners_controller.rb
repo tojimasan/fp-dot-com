@@ -11,7 +11,7 @@ class FinancialPlannersController < ApplicationController
       redirect_to @financial_planner
     else
       flash[:error] = "登録できませんでした"
-      redirect_to new_financial_planner
+      redirect_to new_financial_planner_path
     end
   end
 

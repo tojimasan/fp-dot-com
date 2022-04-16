@@ -7,21 +7,24 @@ RSpec.describe "Clients", type: :system do
 
   context 'クライアントの新規登録ができる時' do
     it '正しい情報を入力すればクライアントの新規登録ができ、詳細ページが表示される' do
-      # トップページに移動する
       visit root_path
-      # トップページに新規登録ページへ遷移するボタンが表示されていること
       expect(page).to have_content('新規登録')
-      # クライアント新規登録ページへ遷移
       visit new_client_path
-      # クライアント情報を入力する
       fill_in 'Name', with: @client.name
-      # 登録ボタンを押すとクライアントモデルのカウントが1上がること
       expect { click_on('登録')}.to change { Client.count }.by(1)
-      # 作成したクライアントのページが表示されること
-      visit client_path(@client)
-      # 新規登録ページやログインページへ遷移するボタンが表示されていないこと
-      expect(page).to have_no_content('新規登録')
-      expect(page).to have_no_content('ログイン')
+      # 新規登録された結果、ログアウトボタンが表示される
+      expect(page).to have_content("ログアウト")
+    end
+  end
+
+  context 'クライアントの新規登録ができない時' do
+    it '名前が入力されていない場合' do
+      visit root_path
+      expect(page).to have_content('新規登録')
+      visit new_client_path
+      fill_in 'Name', with: ''
+      expect { click_on('登録')}.to change { Client.count }.by(0)
+      expect(current_path).to eq new_client_path
     end
   end
 
