@@ -24,4 +24,13 @@ RSpec.describe "Clients", type: :system do
       expect(page).to have_no_content('ログイン')
     end
   end
+
+  context 'ログインができること' do
+    it 'ログイン後、クライアント詳細ページに遷移していること' do
+      log_in(@client)
+      expect(current_path).to eq client_path(@client)
+      expect(page).to have_content(@client.name)
+      expect(page).to have_content("ログアウト")
+    end
+  end
 end

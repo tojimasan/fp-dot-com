@@ -17,11 +17,15 @@ RSpec.describe "FinancialPlanners", type: :system do
       fill_in 'Name', with: @financial_planner.name
       # 登録ボタンを押すとファイナンシャルプランナーモデルのカウントが1上がること
       expect { click_on('登録')}.to change { FinancialPlanner.count }.by(1)
-      # 作成したファイナンシャルプランナーのページが表示されること
-      visit financial_planner_path(@financial_planner)
-      # 新規登録ページやログインページへ遷移するボタンが表示されていないこと
-      expect(page).to have_no_content('新規登録')
-      expect(page).to have_no_content('ログイン')
+    end
+  end
+
+  context 'ログインができること' do
+    it 'ログイン後、ファイナンシャルプランナー詳細ページに遷移していること' do
+      log_in(@financial_planner)
+      expect(current_path).to eq financial_planner_path(@financial_planner)
+      expect(page).to have_content(@financial_planner.name)
+      expect(page).to have_content("ログアウト")
     end
   end
 end
