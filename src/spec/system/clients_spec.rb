@@ -33,4 +33,24 @@ RSpec.describe "Clients", type: :system do
       expect(page).to have_content("ログアウト")
     end
   end
+
+  context 'ログインできないこと' do
+    it "名前が入力されていない場合" do
+      visit login_path
+      fill_in 'Name', with: ''
+      click_button "ログイン"
+      expect(current_path).to eq login_path
+    end
+  end
+
+  context 'ログアウトした場合' do
+    before do
+      log_in(@client)
+      delete logout_path
+    end
+
+    it 'セッション情報が削除されること' do
+      expect(session[:client_id]).to eq nil
+    end
+  end
 end

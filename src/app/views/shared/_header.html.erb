@@ -6,6 +6,7 @@
         <% end %>
         <% if logged_in? %>
             <p class="navbar-text my-0"><%= current_user.name %></p>
+            <%= link_to "ログアウト", logout_path, { class: "btn btn-primary", method: :delete} %>
         <% end %>
     </div>
     </nav>

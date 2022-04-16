@@ -7,6 +7,12 @@ module SessionsHelper
         session[:financial_planner_id] = financial_planner.id
     end
 
+    def log_out
+        session.delete(:client_id)
+        session.delete(:financial_planner_id)
+        @current_user = nil
+    end
+
     # 現在ログイン中のユーザーを返す
     # クライアント、FPどちらかでログインしている場合にはセッションにidがあるので、
     # idを用いてfind_byを行う
