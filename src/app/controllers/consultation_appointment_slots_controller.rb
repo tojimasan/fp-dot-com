@@ -5,6 +5,7 @@ class ConsultationAppointmentSlotsController < ApplicationController
 
   def new
     @consultation_appointment_slot = ConsultationAppointmentSlot.new
+    render layout: "consultation_appointment_slots"
   end
 
   def create
