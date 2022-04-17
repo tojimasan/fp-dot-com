@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_16_214923) do
+ActiveRecord::Schema.define(version: 2022_04_17_031524) do
 
   create_table "clients", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -21,13 +21,14 @@ ActiveRecord::Schema.define(version: 2022_04_16_214923) do
   create_table "consultation_appointment_slots", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "client_id"
     t.bigint "financial_planner_id", null: false
-    t.integer "status", limit: 1, null: false
+    t.integer "status", limit: 1, default: 1, null: false
     t.datetime "start_at", null: false
     t.datetime "end_at", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["client_id"], name: "index_consultation_appointment_slots_on_client_id"
     t.index ["financial_planner_id"], name: "index_consultation_appointment_slots_on_financial_planner_id"
+    t.index ["start_at"], name: "index_consultation_appointment_slots_on_start_at", unique: true
   end
 
   create_table "financial_planners", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
