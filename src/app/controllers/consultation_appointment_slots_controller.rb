@@ -12,8 +12,11 @@ class ConsultationAppointmentSlotsController < ApplicationController
     # end_atは固定でstart_atの30分(1800秒)後とする
     @consultation_appointment_slot.end_at = @consultation_appointment_slot.start_at + SLOT_DURATION
 
+    # 同じ時間にFPが予約枠を作成済みであったら作成しない
+    if ConsultationAppointmentSlot.exists?(financial_planner_id: current_user.id, start_at: params[:consultation_appointment_slot][:start_at])
+      flash[:message] = '同じ時間に予約枠を作成済みです'
     # before_actionでFPユーザーであることは確認しているため、current_userはFPユーザーである
-    if current_user.consultation_appointment_slots << @consultation_appointment_slot
+    elsif current_user.consultation_appointment_slots << @consultation_appointment_slot
       flash[:message] = '予約枠を作成しました'
     else
       flash[:message] = '予約枠を作成できませんでした'
