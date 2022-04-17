@@ -1,9 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Client, type: :model do
-  it "is valid with name" do
-    client = FactoryBot.build(:client, name: "kazuto")
+  it "is valid with default" do
+    client = FactoryBot.build(:client)
     expect(client).to be_valid
+  end
+
+  it "is valid with specific name" do
+    client = FactoryBot.build(:client, name: 'ushijima')
+    expect(client).to be_valid
+    expect(client.name).to eq 'ushijima'
+  end
+
+  it "is valid with trait" do
+    kazuto = FactoryBot.build(:kazutoクライアント)
+    expect(kazuto).to be_valid
+    expect(kazuto.name).to eq 'kazutoクライアント'
   end
 
   it "is invalid with a empty name" do
