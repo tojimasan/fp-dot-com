@@ -1,13 +1,13 @@
 <div class="p-3">
   <div class="d-flex">
-    <h2 class="lead">予約枠登録</h2>
+    <h2 class="lead">予約枠登録 / FP</h2>
   </div>
   <% if flash[:message] %>
       <div class="alert alert-primary" role="alert">
           <%= flash[:message] %>
       </div>
   <% end %>
-  <%= form_with scope: :consultation_appointment_slot, url: consultation_appointment_slots_create_path, local: true do |form| %>
+  <%= form_with scope: :consultation_appointment_slot, url: consultation_appointment_slots_path, local: true do |form| %>
     <div class="mb-3">
       <%= form.label :start_at, class: "form-label" %><br>
       <%= form.datetime_field :start_at, class: "form-control", value: Time.current.strftime('%Y-%m-%dT10:00:00'), min: '2000-01-01T10:00:00', max: '2100-12-31T23:30:00' %>

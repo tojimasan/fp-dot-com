@@ -3,6 +3,33 @@
         <%= flash[:success] %>
     </div>
 <% end %>
-<div class="p-3">
+<div class="p-3 d-flex justify-content-between">
     <h2 class="lead"><%= @client.name %>の予約一覧</h2>
+    <h2 class="lead"><%= link_to "相談の予約枠を検索", consultation_appointment_slots_path, { class: "btn btn-success" } %></h2>
 </div>
+<table class="table table-success table-striped">
+    <thead>
+        <tr>
+        <th scope="col">日付</th>
+        <th scope="col">開始時間</th>
+        <th scope="col">終了時間</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if @consultation_appointment_slots.count == 0 %>
+            <tr>
+                <td>予約中の相談枠はありません</td>
+                <td></td>
+                <td></td>
+            </tr>
+        <% else %>
+            <% @consultation_appointment_slots.each do |consultation_appointment_slot| %>
+                <tr>
+                    <td><%= consultation_appointment_slot.start_at.strftime("%Y/%m/%d") %></td>
+                    <td><%= consultation_appointment_slot.start_at.strftime("%H:%M") %></td>
+                    <td><%= consultation_appointment_slot.end_at.strftime("%H:%M") %></td>
+                </tr>
+            <% end %>
+        <% end %>
+    </tbody>
+</table>

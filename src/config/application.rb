@@ -26,5 +26,6 @@ module App
             routing_specs: false,
             request_specs: false
     end
+    config.autoload_paths += %W(#{config.root}/validator)
   end
 end
