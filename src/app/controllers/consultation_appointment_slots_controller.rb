@@ -22,7 +22,7 @@ class ConsultationAppointmentSlotsController < ApplicationController
     # 同じ時間にFPが予約枠を作成済みであったら作成しない
     if ConsultationAppointmentSlot.exists?(financial_planner_id: current_user.id, start_at: params[:consultation_appointment_slot][:start_at])
       flash[:message] = '同じ時間に予約枠を作成済みです'
-      redirect_to consultation_appointment_slots_path
+      redirect_to new_consultation_appointment_slot_path
     # before_actionでFPユーザーであることは確認しているため、current_userはFPユーザーである
     elsif current_user.consultation_appointment_slots << @consultation_appointment_slot
       flash[:message] = '予約枠を作成しました'
