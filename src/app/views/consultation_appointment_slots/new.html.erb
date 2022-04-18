@@ -11,6 +11,9 @@
     <div class="mb-3">
       <%= form.label :start_at, class: "form-label" %><br>
       <%= form.datetime_field :start_at, class: "form-control", value: Time.current.strftime('%Y-%m-%dT10:00:00'), min: '2000-01-01T10:00:00', max: '2100-12-31T23:30:00' %>
+      <% @consultation_appointment_slot.errors.full_messages_for(:start_at).each do |message| %>
+        <div><%= message %></div>
+      <% end %>
     </div>
 
     <div class="mb-3">
