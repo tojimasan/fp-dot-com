@@ -1,9 +1,11 @@
 module SessionsHelper
     def log_in_as_client(client)
+        session[:financial_planner_id] = nil
         session[:client_id] = client.id
     end
 
     def log_in_as_financial_planner(financial_planner)
+        session[:client_id] = nil
         session[:financial_planner_id] = financial_planner.id
     end
 
