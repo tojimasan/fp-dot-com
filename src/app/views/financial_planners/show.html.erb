@@ -1,9 +1,31 @@
-<% if flash[:success] %>
+<% if flash[:message] %>
     <div class="alert alert-primary" role="alert">
-        <%= flash[:success] %>
+        <%= flash[:message] %>
     </div>
 <% end %>
 <div class="p-3 d-flex justify-content-between">
     <h2 class="lead"><%= @financial_planner.name %>の予約一覧</h2>
     <h2 class="lead"><%= link_to "予約枠を作成", consultation_appointment_slots_new_path, { class: "btn btn-success" } %></h2>
 </div>
+<table class="table table-success table-striped">
+    <thead>
+        <tr>
+        <th scope="col">日付</th>
+        <th scope="col">開始時間</th>
+        <th scope="col">終了時間</th>
+        <th scope="col">予約状況</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @consultation_appointment_slots.each do |consultation_appointment_slot| %>
+            <tr>
+                <td><%= consultation_appointment_slot.start_at.strftime("%Y/%m/%d") %></td>
+                <td><%= consultation_appointment_slot.start_at.strftime("%H:%M") %></td>
+                <td><%= consultation_appointment_slot.end_at.strftime("%H:%M") %></td>
+                <td>
+                    <%= consultation_appointment_slot.status == 1 ? '空き' : '予約済み'  %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

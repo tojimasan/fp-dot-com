@@ -18,6 +18,8 @@ class FinancialPlannersController < ApplicationController
 
   def show
     @financial_planner = FinancialPlanner.find(params[:id])
+    # FPが持っている予約枠を取得
+    @consultation_appointment_slots = @financial_planner.consultation_appointment_slots
     render layout: "clients"
   end
 
