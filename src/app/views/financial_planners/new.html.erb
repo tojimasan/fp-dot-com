@@ -4,17 +4,17 @@
     <span class="mx-4"><%= link_to "クライアント登録画面へ", new_client_path, { class: "text-decoration-none"} %></span>
   </div>
   <% if flash[:error] %>
-      <div class="alert alert-danger" role="alert">
-          <%= flash[:error] %>
+      <div class="alert alert-danger mb-0" role="alert">
+          <p class="mb-0"><%= flash[:error] %></p>
+          <% @financial_planner.errors.full_messages_for(:name).each do |message| %>
+            <p class="mb-0"><%= message %></p>
+          <% end %>
       </div>
   <% end %>
   <%= form_with model: @financial_planner do |form| %>
     <div class="mb-3">
-      <%= form.label :name, class: "form-label" %><br>
+      <%= form.label :name, class: "form-label" %>
       <%= form.text_field :name, class: "form-control" %>
-      <% @financial_planner.errors.full_messages_for(:name).each do |message| %>
-        <div><%= message %></div>
-      <% end %>
     </div>
 
     <div class="mb-3">

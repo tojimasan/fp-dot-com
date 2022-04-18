@@ -24,7 +24,7 @@ RSpec.describe "FinancialPlanners", type: :system do
       visit new_financial_planner_path
       fill_in 'Name', with: ''
       expect { click_on('登録')}.to change { FinancialPlanner.count }.by(0)
-      expect(current_path).to eq new_financial_planner_path
+      expect(current_path).to eq financial_planners_path
     end
   end
 

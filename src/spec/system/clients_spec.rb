@@ -24,7 +24,7 @@ RSpec.describe "Clients", type: :system do
       visit new_client_path
       fill_in 'Name', with: ''
       expect { click_on('登録')}.to change { Client.count }.by(0)
-      expect(current_path).to eq new_client_path
+      expect(current_path).to eq clients_path
     end
   end
 
