@@ -1,0 +1,42 @@
+<div class="p-3">
+  <div class="d-flex">
+    <h2 class="lead">予約枠登録 / クライアント</h2>
+  </div>
+  <% if flash[:error] %>
+      <div class="alert alert-danger" role="alert">
+          <%= flash[:error] %>
+      </div>
+  <% end %>
+  <table class="table table-striped">
+      <thead>
+          <tr>
+          <th scope="col">日付</th>
+          <th scope="col">開始時間</th>
+          <th scope="col">終了時間</th>
+          <th scope="col">予約状況</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td><%= @consultation_appointment_slot.start_at.strftime("%Y/%m/%d") %></td>
+              <td><%= @consultation_appointment_slot.start_at.strftime("%H:%M") %></td>
+              <td><%= @consultation_appointment_slot.end_at.strftime("%H:%M") %></td>
+              <td>
+                <%= @consultation_appointment_slot.status == 1 ? '空き' : '予約済み'  %>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+
+  <%= form_with model: @consultation_appointment_slot, local: true do |form| %>
+    <div class="mb-3">
+      <%= form.hidden_field :status, :value => 2 %>
+      <%= form.hidden_field :client_id, :value => @client_id %>
+      <% if @consultation_appointment_slot.status == 1 %>
+        <%= submit_tag '予約する', class: "btn btn-primary" %>
+      <% else %>
+        <%= submit_tag '予約する', class: "btn btn-primary", disabled: true %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

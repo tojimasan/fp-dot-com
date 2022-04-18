@@ -5,7 +5,7 @@
 <% end %>
 <div class="p-3 d-flex justify-content-between">
     <h2 class="lead"><%= @financial_planner.name %>の予約一覧</h2>
-    <h2 class="lead"><%= link_to "予約枠を作成", consultation_appointment_slots_new_path, { class: "btn btn-success" } %></h2>
+    <h2 class="lead"><%= link_to "予約枠を作成", new_consultation_appointment_slot_path, { class: "btn btn-success" } %></h2>
 </div>
 <table class="table table-success table-striped">
     <thead>

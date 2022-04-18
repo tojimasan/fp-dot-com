@@ -18,6 +18,7 @@ class ClientsController < ApplicationController
 
     def show
         @client = Client.find(params[:id])
+        @consultation_appointment_slots = ConsultationAppointmentSlot.where(client_id: params[:id])
         render layout: "clients"
     end
 

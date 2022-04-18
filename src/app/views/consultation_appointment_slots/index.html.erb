@@ -1,0 +1,16 @@
+<div class="p-3">
+  <div class="d-flex">
+    <h2 class="lead">予約枠一覧</h2>
+  </div>
+  <% if flash[:message] %>
+      <div class="alert alert-primary" role="alert">
+          <%= flash[:message] %>
+      </div>
+  <% end %>
+    <div class="list-group">
+        <% @consultation_appointment_slots.each do |consultation_appointment_slot| %>
+            <% status_str = consultation_appointment_slot.status == 1 ? '空き' : '空きなし' %>
+            <%= link_to "#{consultation_appointment_slot.start_at.strftime("%Y/%m/%d %H:%M")} ~ #{consultation_appointment_slot.end_at.strftime("%H:%M")} #{status_str}", edit_consultation_appointment_slot_path(consultation_appointment_slot), { class: "list-group-item list-group-item-action"} %>
+        <% end %>
+    </div>
+</div>
