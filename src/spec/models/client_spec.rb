@@ -33,4 +33,15 @@ RSpec.describe Client, type: :model do
       end
     end
   end
+
+  describe '#consultation_appointment_slots' do
+    context '予約した枠が複数ある場合' do
+      let!(:client) { create(:client) }
+      let!(:unreserved_slot) { create :consultation_appointment_slot, client: client, status: 1 }
+      let!(:reserved_slot) { create :consultation_appointment_slot, client: client, status: 2 }
+      it '件数が返ること' do
+        expect(client.consultation_appointment_slots).to eq [unreserved_slot, reserved_slot]
+      end
+    end
+  end
 end
