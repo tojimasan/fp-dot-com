@@ -1,31 +1,36 @@
 require 'rails_helper'
 
 RSpec.describe Client, type: :model do
-  it "is valid with default" do
-    client = FactoryBot.build(:client)
-    expect(client).to be_valid
-  end
+  describe 'attribute: name' do
+    context '入力されている場合' do
+      it '有効であること' do
+        client = FactoryBot.build(:client)
+        expect(client).to be_valid
+      end
+    end
 
-  it "is valid with specific name" do
-    client = FactoryBot.build(:client, name: 'ushijima')
-    expect(client).to be_valid
-    expect(client.name).to eq 'ushijima'
-  end
+    context '空の場合' do
+      it 'エラーになること' do
+        client = FactoryBot.build(:client, name: '')
+        client.valid?
+        expect(client.errors[:name]).to include("can't be blank")
+      end
+    end
 
-  it "is valid with trait" do
-    kazuto = FactoryBot.build(:kazutoクライアント)
-    expect(kazuto).to be_valid
-    expect(kazuto.name).to eq 'kazutoクライアント'
-  end
+    context 'nilの場合' do
+      it 'エラーになること' do
+        client = FactoryBot.build(:client, name: nil)
+        client.valid?
+        expect(client.errors[:name]).to include("can't be blank")
+      end
+    end
 
-  it "is invalid with a empty name" do
-    client = FactoryBot.build(:client, name: "")
-    expect(client).to_not be_valid
-  end
-
-  it "is invalid without a name" do
-    client = FactoryBot.build(:client, name: nil)
-    client.valid?
-    expect(client.errors[:name]).to include("can't be blank")
+    context '空文字の場合' do
+      it 'エラーになること' do
+        client = FactoryBot.build(:client, name: ' ')
+        client.valid?
+        expect(client.errors[:name]).to include("can't be blank")
+      end
+    end
   end
 end
