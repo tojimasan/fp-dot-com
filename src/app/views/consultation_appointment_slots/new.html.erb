@@ -2,18 +2,18 @@
   <div class="d-flex">
     <h2 class="lead">予約枠登録 / FP</h2>
   </div>
-  <% if flash[:message] %>
-      <div class="alert alert-primary" role="alert">
-          <%= flash[:message] %>
+  <% if flash[:error] %>
+      <div class="alert alert-danger mb-0" role="alert">
+          <p class="mb-0"><%= flash[:error] %></p>
+          <% @consultation_appointment_slot.errors.full_messages_for(:start_at).each do |message| %>
+            <p class="mb-0"><%= message %></p>
+          <% end %>
       </div>
   <% end %>
   <%= form_with scope: :consultation_appointment_slot, url: consultation_appointment_slots_path, local: true do |form| %>
     <div class="mb-3">
-      <%= form.label :start_at, class: "form-label" %><br>
+      <%= form.label :start_at, class: "form-label" %>
       <%= form.datetime_field :start_at, class: "form-control", value: Time.current.strftime('%Y-%m-%dT10:00:00'), min: '2000-01-01T10:00:00', max: '2100-12-31T23:30:00' %>
-      <% @consultation_appointment_slot.errors.full_messages_for(:start_at).each do |message| %>
-        <div><%= message %></div>
-      <% end %>
     </div>
 
     <div class="mb-3">
