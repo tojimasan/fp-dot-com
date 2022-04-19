@@ -1,7 +1,7 @@
 class FinancialPlannersController < ApplicationController
   def new
     @financial_planner = FinancialPlanner.new
-    render layout: "clients"
+    render layout: "financial_planners"
   end
   
   def create
@@ -11,8 +11,8 @@ class FinancialPlannersController < ApplicationController
       log_in_as_financial_planner(@financial_planner)
       redirect_to @financial_planner
     else
-      flash[:error] = "登録できませんでした"
-      redirect_to new_financial_planner_path
+      flash.now[:error] = "登録できませんでした"
+      render new_financial_planner_path
     end
   end
 
@@ -20,7 +20,7 @@ class FinancialPlannersController < ApplicationController
     @financial_planner = FinancialPlanner.find(params[:id])
     # FPが持っている予約枠を取得
     @consultation_appointment_slots = @financial_planner.consultation_appointment_slots
-    render layout: "clients"
+    render layout: "financial_planners"
   end
 
   private
