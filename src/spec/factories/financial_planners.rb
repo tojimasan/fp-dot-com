@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :financial_planner do
-    name { "ファイナンシャルプランナー名" }
+    sequence(:name) { |n| "FP#{n}" }
   end
 end
