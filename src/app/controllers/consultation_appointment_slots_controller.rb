@@ -47,7 +47,7 @@ class ConsultationAppointmentSlotsController < ApplicationController
         flash[:success] = "予約しました"
         redirect_to current_user
       else
-        flash[:error] = "予約できませんでした"
+        flash.now[:error] = "予約できませんでした"
         render 'edit'
       end
   end
