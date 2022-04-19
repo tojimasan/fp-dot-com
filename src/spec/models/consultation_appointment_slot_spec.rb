@@ -246,28 +246,101 @@ RSpec.describe ConsultationAppointmentSlot, type: :model do
       end
     end
 
-    context 'when minutes is not 00 or 30' do
-      # end_atが00または、30分以外の場合は、無効であること
+    context 'when saturday 11:00' do
+      # end_atが土曜であるかつ、11:30 ~ 15:00でない場合は、無効であること
       it 'is invalid' do
-        consultation_appointment_slot.end_at = "2022-04-18 10:10:00"
-        expect(consultation_appointment_slot).to be_invalid
-        expect(consultation_appointment_slot.errors[:end_at]).to include("予約枠の終了時間は毎時0分、または30分です")
-      end
-    end
-
-    context 'when saturday and hour is not 10 to 14' do
-      # end_atが土曜であるかつ、11時から15時でない場合は、無効であること
-      it 'is invalid' do
-        consultation_appointment_slot.end_at = "2022-04-16 16:00:00"
+        consultation_appointment_slot.end_at = "2022-04-16 11:00:00"
         expect(consultation_appointment_slot).to be_invalid
         expect(consultation_appointment_slot.errors[:end_at]).to include("土曜日の予約枠設定時間は11:00 ~ 15:00です")
       end
     end
 
-    context 'when weekday and hour is not 10 to 17' do
-      # end_atが平日であるかつ、10時から18時でない場合は、無効であること
+    context 'when saturday 11:29' do
+      # 00分、30分以外の場合は、無効であること
       it 'is invalid' do
-        consultation_appointment_slot.end_at = "2022-04-18 19:00:00"
+        consultation_appointment_slot.end_at = "2022-04-16 11:29:00"
+        expect(consultation_appointment_slot).to be_invalid
+        expect(consultation_appointment_slot.errors[:end_at]).to include("予約枠の終了時間は毎時0分、または30分です")
+      end
+    end
+
+    context 'when saturday 11:30' do
+      it 'is valid' do
+        consultation_appointment_slot.end_at = "2022-04-16 11:30:00"
+        expect(consultation_appointment_slot).to be_valid
+      end
+    end
+
+    context 'when saturday 15:00' do
+      it 'is valid' do
+        consultation_appointment_slot.end_at = "2022-04-16 15:00:00"
+        expect(consultation_appointment_slot).to be_valid
+      end
+    end
+
+    context 'when saturday 15:01' do
+      # 00分、30分以外の場合は、無効であること
+      it 'is invalid' do
+        consultation_appointment_slot.end_at = "2022-04-16 15:01:00"
+        expect(consultation_appointment_slot).to be_invalid
+        expect(consultation_appointment_slot.errors[:end_at]).to include("予約枠の終了時間は毎時0分、または30分です")
+      end
+    end
+
+    context 'when saturday 15:30' do
+      # end_atが土曜であるかつ、11:30 ~ 15:00でない場合は、無効であること
+      it 'is invalid' do
+        consultation_appointment_slot.end_at = "2022-04-16 15:30:00"
+        expect(consultation_appointment_slot).to be_invalid
+        expect(consultation_appointment_slot.errors[:end_at]).to include("土曜日の予約枠設定時間は11:00 ~ 15:00です")
+      end
+    end
+
+    context 'when weekday 10:00' do
+      # 10:30 ~ 18:00でない場合は、無効であること
+      it 'is invalid' do
+        consultation_appointment_slot.end_at = "2022-04-18 10:00:00"
+        expect(consultation_appointment_slot).to be_invalid
+        expect(consultation_appointment_slot.errors[:end_at]).to include("平日の予約枠設定時間は10:00 ~ 18:00です")
+      end
+    end
+
+    context 'when weekday 10:29' do
+      # 00分、30分以外の場合は、無効であること
+      it 'is invalid' do
+        consultation_appointment_slot.end_at = "2022-04-18 10:29:00"
+        expect(consultation_appointment_slot).to be_invalid
+        expect(consultation_appointment_slot.errors[:end_at]).to include("予約枠の終了時間は毎時0分、または30分です")
+      end
+    end
+
+    context 'when weekday 10:30' do
+      it 'is valid' do
+        consultation_appointment_slot.end_at = "2022-04-18 10:30:00"
+        expect(consultation_appointment_slot).to be_valid
+      end
+    end
+
+    context 'when weekday 18:00' do
+      it 'is valid' do
+        consultation_appointment_slot.end_at = "2022-04-18 18:00:00"
+        expect(consultation_appointment_slot).to be_valid
+      end
+    end
+
+    context 'when weekday 18:01' do
+      # 00分、30分以外の場合は、無効であること
+      it 'is invalid' do
+        consultation_appointment_slot.end_at = "2022-04-18 18:01:00"
+        expect(consultation_appointment_slot).to be_invalid
+        expect(consultation_appointment_slot.errors[:end_at]).to include("予約枠の終了時間は毎時0分、または30分です")
+      end
+    end
+
+    context 'when weekday 18:30' do
+      # 10:30 ~ 18:00でない場合は、無効であること
+      it 'is invalid' do
+        consultation_appointment_slot.end_at = "2022-04-18 18:30:00"
         expect(consultation_appointment_slot).to be_invalid
         expect(consultation_appointment_slot.errors[:end_at]).to include("平日の予約枠設定時間は10:00 ~ 18:00です")
       end
