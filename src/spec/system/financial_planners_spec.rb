@@ -1,59 +1,114 @@
 require 'rails_helper'
 
 RSpec.describe "FinancialPlanners", type: :system do
-  before do
-    @financial_planner = FactoryBot.create(:financial_planner)
-  end
+  describe '新規登録' do
+    context '正しい情報を入力した場合' do
+      financial_planner = FactoryBot.build(:financial_planner)
+      it '登録され、詳細ページが表示されること' do
+        visit new_financial_planner_path
+        expect(page).to have_content('FP登録')
+        fill_in 'Name', with: financial_planner.name
+        # クリックしたタイミングで別のレコードを生成している？
+        expect { click_on('登録') }.to change { FinancialPlanner.count }.by(1)
+        expect(current_path).to eq financial_planner_path(FinancialPlanner.last)
+        expect(page).to have_content("#{financial_planner.name}の予約一覧")
+        # flashが表示されること
+        expect(has_css?('.alert-primary')).to be_truthy
+        visit current_path
+        expect(has_css?('.alert-primary')).to be_falsy
+      end
+    end
 
-  context 'ファイナンシャルプランナーの新規登録ができる時' do
-    it '正しい情報を入力すればファイナンシャルプランナーの新規登録ができ、詳細ページが表示される' do
-      visit root_path
-      expect(page).to have_content('新規登録')
-      visit new_financial_planner_path
-      fill_in 'Name', with: @financial_planner.name
-      expect { click_on('登録')}.to change { FinancialPlanner.count }.by(1)
-      # 新規登録された結果、予約一覧が表示される
-      expect(page).to have_content("予約一覧")
+    context '名前が空の場合' do
+      it '登録されないこと' do
+        visit new_financial_planner_path
+        expect(page).to have_content('FP登録')
+        fill_in 'Name', with: ''
+        expect { click_on('登録') }.to change { FinancialPlanner.count }.by(0)
+        expect(page).to have_content("FP登録")
+        expect(page).to have_content("Name can't be blank")
+      end
+    end
+
+    context '名前がnilの場合' do
+      it '登録されないこと' do
+        visit new_financial_planner_path
+        expect(page).to have_content('FP登録')
+        fill_in 'Name', with: nil
+        expect { click_on('登録') }.to change { FinancialPlanner.count }.by(0)
+        expect(page).to have_content("FP登録")
+        expect(page).to have_content("Name can't be blank")
+      end
+    end
+
+    context '名前が空文字の場合' do
+      it '登録されないこと' do
+        visit new_financial_planner_path
+        expect(page).to have_content('FP登録')
+        fill_in 'Name', with: ' '
+        expect { click_on('登録') }.to change { FinancialPlanner.count }.by(0)
+        expect(page).to have_content("FP登録")
+        expect(page).to have_content("Name can't be blank")
+      end
     end
   end
 
-  context 'ファイナンシャルプランナーの新規登録ができない時' do
-    it '名前が入力されていない場合' do
-      visit root_path
-      expect(page).to have_content('新規登録')
-      visit new_financial_planner_path
-      fill_in 'Name', with: ''
-      expect { click_on('登録')}.to change { FinancialPlanner.count }.by(0)
-      expect(current_path).to eq financial_planners_path
-    end
-  end
+  describe 'ログイン' do
+    context '正しい情報を入力した場合' do
+      # ログインするためにあらかじめFPを作成する
+      let!(:financial_planner) { create(:financial_planner) }
 
-  context 'ログインができること' do
-    it 'ログイン後、ファイナンシャルプランナー詳細ページに遷移していること' do
-      log_in(@financial_planner)
-      expect(current_path).to eq financial_planner_path(@financial_planner)
-      expect(page).to have_content(@financial_planner.name)
-      expect(page).to have_content("ログアウト")
+      it 'ログインできること' do
+        visit login_path
+        fill_in 'Name', with: financial_planner.name
+        click_button "ログイン"
+        expect(current_path).to eq financial_planner_path(financial_planner)
+        expect(page).to have_content(financial_planner.name)
+        expect(page).to have_content("ログアウト")
+        expect(page).to have_content("予約枠を作成")
+        expect(page).to have_content("ログインしました")
+        visit current_path
+        expect(page).not_to have_content("ログインしました")
+      end
     end
-  end
 
-  context 'ログインできないこと' do
-    it "名前が入力されていない場合" do
-      visit login_path
-      fill_in 'Name', with: ''
-      click_button "ログイン"
-      expect(current_path).to eq login_path
+    context '名前が空の場合' do
+      it "ログインできないこと" do
+        visit login_path
+        fill_in 'Name', with: ''
+        click_button "ログイン"
+        expect(current_path).to eq login_path
+      end
+    end
+
+    context '名前がnilの場合' do
+      it "ログインできないこと" do
+        visit login_path
+        fill_in 'Name', with: nil
+        click_button "ログイン"
+        expect(current_path).to eq login_path
+      end
+    end
+
+    context '名前が空文字の場合' do
+      it "ログインできないこと" do
+        visit login_path
+        fill_in 'Name', with: ' '
+        click_button "ログイン"
+        expect(current_path).to eq login_path
+      end
     end
   end
 
   context 'ログアウトした場合' do
+    let!(:financial_planner) { create(:financial_planner) }
     before do
-      log_in(@financial_planner)
-      delete logout_path
+      log_in(financial_planner)
     end
 
-    it 'セッション情報が削除されること' do
-      expect(session[:financial_planner_id]).to eq nil
+    it 'ルートに戻ること' do
+      click_link "ログアウト"
+      expect(page).to have_content("ログアウトしました")
     end
   end
 end
