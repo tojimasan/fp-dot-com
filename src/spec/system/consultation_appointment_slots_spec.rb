@@ -76,4 +76,21 @@ RSpec.describe "ConsultationAppointmentSlots", type: :system do
       end
     end
   end
+  
+  describe '新規予約登録' do
+    # クライアントユーザーが行う
+    before do
+      @consultation_appointment_slot = FactoryBot.create(:consultation_appointment_slot, status: 1)
+      @client = FactoryBot.create(:client)
+      log_in(@client)
+      visit edit_consultation_appointment_slot_path(@consultation_appointment_slot)
+    end
+
+    context '予約状態が空きの枠を予約した場合' do
+      it '成功すること' do
+        click_button '予約する'
+        expect(page).to have_content('予約しました')
+      end
+    end
+  end
 end
