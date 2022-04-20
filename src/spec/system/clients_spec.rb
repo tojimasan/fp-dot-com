@@ -8,7 +8,6 @@ RSpec.describe "Clients", type: :system do
         visit new_client_path
         expect(page).to have_content('クライアント登録')
         fill_in 'Name', with: client.name
-        # クリックしたタイミングで別のレコードを生成している？
         expect { click_on('登録') }.to change { Client.count }.by(1)
         expect(current_path).to eq client_path(Client.last)
         expect(page).to have_content("#{client.name}の予約一覧")

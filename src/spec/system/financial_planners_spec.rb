@@ -8,7 +8,6 @@ RSpec.describe "FinancialPlanners", type: :system do
         visit new_financial_planner_path
         expect(page).to have_content('FP登録')
         fill_in 'Name', with: financial_planner.name
-        # クリックしたタイミングで別のレコードを生成している？
         expect { click_on('登録') }.to change { FinancialPlanner.count }.by(1)
         expect(current_path).to eq financial_planner_path(FinancialPlanner.last)
         expect(page).to have_content("#{financial_planner.name}の予約一覧")
