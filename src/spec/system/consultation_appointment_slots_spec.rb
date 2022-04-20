@@ -30,22 +30,6 @@ RSpec.describe "ConsultationAppointmentSlots", type: :system do
     end
 
     # 失敗
-    context '同じ時間に予約を作成している場合' do
-      before do
-        fill_in 'consultation_appointment_slot_start_at', with: '2022-04-20T10:00:00'
-        click_button "作成"
-      end
-
-      it '失敗すること' do
-        visit new_consultation_appointment_slot_path
-        expect(page).to have_content('予約枠登録')
-        fill_in 'consultation_appointment_slot_start_at', with: '2022-04-20T10:00:00'
-        expect { click_on('作成') }.to change { ConsultationAppointmentSlot.count }.by(0)
-        expect(current_path).to eq new_consultation_appointment_slot_path
-        expect(page).to have_content('同じ時間に予約枠を作成済みです')
-      end
-    end
-
     context '平日の10:00 ~ 18:00以外で作成した場合' do
       it '失敗すること' do
         expect(page).to have_content('予約枠登録')
