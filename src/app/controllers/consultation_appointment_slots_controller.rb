@@ -25,7 +25,7 @@ class ConsultationAppointmentSlotsController < ApplicationController
       redirect_to new_consultation_appointment_slot_path
     # before_actionでFPユーザーであることは確認しているため、current_userはFPユーザーである
     elsif current_user.consultation_appointment_slots << @consultation_appointment_slot
-      flash[:message] = '予約枠を作成しました'
+      flash[:success] = '予約枠を作成しました'
       redirect_to financial_planner_path(current_user.id)
     else
       flash.now[:error] = '予約枠を作成できませんでした'
