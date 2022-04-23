@@ -84,8 +84,9 @@ docker compose exec web rspec
 - [Fp.com](https://fp-dot-com.herokuapp.com/)
 
 ### 注意点
-本番はHerokuの無料プランで公開しております。無料プランの関係でリクエストに時間がかかり、503が返ってくることがあります
-理由としてはHerokuがリクエストを受け取ってからアプリケーションを起動させるためです。そのため**タイムアウトをした際には再度リロードして下さい。**
+~~本番はHerokuの無料プランで公開しております。無料プランの関係でリクエストに時間がかかり、503が返ってくることがあります
+理由としてはHerokuがリクエストを受け取ってからアプリケーションを起動させるためです。そのため**タイムアウトをした際には再度リロードして下さい。**~~
+定期的にアクセスすることでアイドル状態がないようにしています。もし503エラーが発生した場合には再リロードをお願いします。
 ```bash
 2022-04-18T21:31:09.483108+00:00 heroku[router]: at=error code=H20 desc="App boot timeout" method=GET path="/" host=fp-dot-com.herokuapp.com request_id=ad931152-d7f5-4b5b-ab91-88dfbcb30aa5 fwd="153.139.174.138" dyno= connect= service= status=503 bytes= protocol=https
 ```
